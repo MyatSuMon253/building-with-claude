@@ -24,11 +24,12 @@ def add_assistant_message(messages, text):
     assistant_message = {"role": "assistant", "content": text}
     messages.append(assistant_message)
 
-def chat(messages, system=None):
+def chat(messages, system=None, temperature=1.0):
     params = {
         "model": model,
         "max_tokens": 1000,
         "messages": messages,
+        "temperature": temperature
     }
     
     if system:
@@ -65,3 +66,9 @@ Do not directly answer a student's questions.
 Guide them to a solution step by step.
 """
 answer = chat(messages, system=system)
+
+# Low temperature - more predictable
+answer = chat(messages, temperature=0.0)
+
+# High temperature - more creative  
+answer = chat(messages, temperature=1.0)
