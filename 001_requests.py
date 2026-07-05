@@ -24,12 +24,17 @@ def add_assistant_message(messages, text):
     assistant_message = {"role": "assistant", "content": text}
     messages.append(assistant_message)
 
-def chat(messages):
-    message = client.messages.create(
-        model=model,
-        max_tokens=1000,
-        messages=messages,
-    )
+def chat(messages, system=None):
+    params = {
+        "model": model,
+        "max_tokens": 1000,
+        "messages": messages,
+    }
+    
+    if system:
+        params["system"] = system
+    
+    message = client.messages.create(**params)
     return message.content[0].text
 
 # Start with an empty message list
@@ -49,3 +54,14 @@ add_user_message(messages, "Write another sentence")
 
 # Get the follow-up response with full context
 final_answer = chat(messages)
+
+# Without system prompt
+answer = chat(messages)
+
+# With system prompt
+system = """
+You are a patient math tutor.
+Do not directly answer a student's questions.
+Guide them to a solution step by step.
+"""
+answer = chat(messages, system=system)
